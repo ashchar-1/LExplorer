@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorador Profesional UPTBAL 2026</title>
+    <style>
+        :root { 
+            --lila-dark: #4c1d95; 
+            --lila-mid: #6b46c1; 
+            --lila-light: #f3f0ff; 
+            --accent: #f39c12;
+            --text: #1e293b;
+            --info-blue: #0ea5e9;
+        }
+        
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8fafc; margin: 0; padding: 15px; color: var(--text); }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        .status-bar { display: none; text-align: center; padding: 10px; font-size: 13px; font-weight: bold; border-radius: 12px; margin-bottom: 15px; }
+        .offline { display: block; background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; }
+        .online-save { display: block; background: #dcfce7; color: #15803d; border: 1px solid #4ade80; }
+
+        .header-card { background: linear-gradient(135deg, var(--lila-dark) 0%, var(--lila-mid) 100%); color: white; padding: 30px; border-radius: 25px; text-align: center; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        
+        .search-section { background: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        select { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 16px; color: var(--lila-dark); font-weight: 600; outline: none; }
+
+        .info-panel { display: none; animation: slideUp 0.5s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .quote-box { background: white; border-left: 5px solid var(--accent); padding: 20px; border-radius: 15px; margin-bottom: 20px; font-style: italic; color: var(--lila-dark); font-weight: 500; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+
+        .section { background: white; padding: 20px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
+        .section-title { font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--lila-mid); margin-bottom: 15px; display: block; letter-spacing: 1px; border-bottom: 1px solid var(--lila-light); padding-bottom: 8px; }
+
+        .concept-card { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 18px; border-radius: 15px; margin-bottom: 15px; }
+        .inst-logo { font-size: 12px; font-weight: 800; color: #166534; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .inst-definition { font-size: 14px; color: #1e293b; line-height: 1.6; font-weight: 400; }
+
+        .card-item { background: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 12px; border: 1px solid #e2e8f0; }
+        .card-tag { font-size: 10px; font-weight: 800; color: white; background: var(--info-blue); padding: 3px 8px; border-radius: 6px; text-transform: uppercase; margin-bottom: 8px; display: inline-block; }
+        .card-name { font-weight: 700; color: var(--lila-dark); font-size: 15px; display: block; }
+        
+        .btn-action { display: inline-block; background: var(--lila-mid); color: white; padding: 8px 16px; border-radius: 8px; font-size: 12px; text-decoration: none; font-weight: bold; margin-top: 10px; }
+        
+        .reto-box { background: #fff7ed; border: 2px dashed #fb923c; padding: 20px; border-radius: 20px; }
+        
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .btn { padding: 15px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; font-size: 13px; color: white; transition: 0.3s; }
+        .btn-news { background: #1e293b; }
+        .btn-yt-gen { background: #ef4444; }
+        
+        .btn-wa { display: block; width: 100%; padding: 18px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; text-align: center; font-size: 15px; color: white; background: #22c55e; margin-top: 15px; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); }
+        .disabled { background: #cbd5e1 !important; cursor: not-allowed !important; pointer-events: none; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="connection-status" class="status-bar"></div>
+
+    <div class="header-card">
+        <h1 style="margin:0; font-size: 24px;">UPTBAL Argelia Laya</h1>
+        <p style="opacity: 0.9; font-size: 14px;">Explorador de Conceptos y Tendencias 2026</p>
+    </div>
+
+    <div class="search-section">
+        <select id="pnf-selector" onchange="updateUI()">
+            <option value="">🔍 Selecciona un PNF</option>
+            <option value="turismo">Turismo (OMT)</option>
+            <option value="informatica">Informática (IEEE/ACM)</option>
+            <option value="pda">Producción y Dist. de Alimentos (ISO 22000)</option>
+            <option value="administracion">Administración (PMI)</option>
+            <option value="construccion">Construcción Civil (ASCE)</option>
+            <option value="mantenimiento">Mantenimiento Mecánico (ISO 55000)</option>
+            <option value="agroalimentaria">Agroalimentaria (FAO)</option>
+            <option value="seguridad_alimentaria">Seguridad Alimentaria (Codex/OMS)</option>
+        </select>
+    </div>
+
+    <div id="info-panel" class="info-panel">
+        <div id="quote-view" class="quote-box"></div>
+
+        <div class="section">
+            <span class="section-title">🏛️ Concepto Normativo Internacional</span>
+            <div id="concept-view" class="concept-card"></div>
+        </div>
+
+        <div class="section">
+            <span class="section-title">🚀 Habilidades de Competitividad</span>
+            <div id="skills-view"></div>
+        </div>
+
+        <div class="section reto-box">
+            <span class="section-title" style="color: #9a3412;">🎯 Reto Práctico del Día</span>
+            <p id="reto-text" style="font-size: 15px; font-weight: 500; margin: 0; color: #7c2d12;"></p>
+        </div>
+
+        <div class="btn-group">
+            <a href="#" id="link-trends" target="_blank" class="btn btn-news dyn-link">📈 Noticias y Tendencias</a>
+            <a href="#" id="link-yt-trends" target="_blank" class="btn btn-yt-gen dyn-link">▶️ Videos de Tendencia</a>
+        </div>
+
+        <button onclick="compartirWA()" id="btn-wa" class="btn-wa dyn-link">📲 Compartir Informe por WhatsApp</button>
+    </div>
+</div>
+
+<script>
+    const database = {
+        "turismo": { 
+            quote: "«El turismo es un fenómeno social, cultural y económico que supone el desplazamiento de personas».",
+            inst: "Organización Mundial del Turismo (OMT)",
+            definition: "Según la **OMT**, el turismo comprende las actividades que realizan las personas durante sus viajes y estancias en lugares distintos a su entorno habitual por un período inferior a un año, con fines de ocio, negocios u otros motivos no relacionados con una actividad remunerada en el lugar visitado.",
+            reto: "Diseña una experiencia turística sustentable bajo los estándares del Código Ético Mundial de la OMT.", 
+            skills: [
+                { name: "Gestión de Destinos (ISO 21401)", concept: "Sostenibilidad en sistemas de gestión para alojamientos.", yt: "iso 21401 turismo sostenible" },
+                { name: "Análisis de Demanda Turística", concept: "Uso de estadísticas oficiales para predecir flujos de viajeros.", yt: "analisis de mercado turistico" }
+            ],
+            search_trends: "tendencias turismo mundial innovacion 2026",
+            yt_trends: "tendencias turismo y hospitalidad 2026"
+        },
+        "informatica": { 
+            quote: "«La computación no es sobre computadoras, es sobre la resolución de problemas».",
+            inst: "IEEE / ACM (Association for Computing Machinery)",
+            definition: "De acuerdo con el estándar **IEEE/ACM**, la Informática es el estudio sistemático de los procesos algorítmicos que describen y transforman la información: su teoría, análisis, diseño, eficiencia, implementación y aplicación.",
+            reto: "Aplica el estándar de documentación IEEE 829 en un pequeño módulo de código.", 
+            skills: [
+                { name: "Desarrollo Seguro (OWASP)", concept: "Aplicación de seguridad desde la fase de diseño del software.", yt: "owasp top 10 principiantes" },
+                { name: "Arquitectura de Software", concept: "Estructuración de sistemas complejos bajo normas IEEE.", yt: "arquitectura de software limpia" }
+            ],
+            search_trends: "tendencias tecnologia software desarrollo 2026",
+            yt_trends: "tendencias programacion e informatica 2026"
+        },
+        "pda": { 
+            quote: "«La logística alimentaria es el puente vital entre la cosecha y la nutrición global».",
+            inst: "ISO 22000 / FAO",
+            definition: "Según la norma **ISO 22000** y los lineamientos de la **FAO**, la Producción y Distribución abarca la planificación, implementación y control eficiente del flujo de alimentos desde el origen hasta el consumo, asegurando su trazabilidad, calidad e inocuidad.",
+            reto: "Traza la ruta logística óptima para distribuir productos locales minimizando la huella de carbono y el desperdicio.", 
+            skills: [
+                { name: "Logística de Cadena de Frío", concept: "Mantenimiento riguroso de temperaturas para preservación de perecederos.", yt: "cadena de frio logistica alimentos" },
+                { name: "Gestión de Inventarios (FEFO)", concept: "Sistemas de rotación First Expired, First Out para reducir mermas.", yt: "metodos de inventario fifo fefo" }
+            ],
+            search_trends: "tendencias logistica distribucion de alimentos 2026",
+            yt_trends: "tendencias cadena de suministro alimentos 2026"
+        },
+        "administracion": { 
+            quote: "«La administración es, ante todo, una práctica donde el arte y la ciencia se encuentran».",
+            inst: "Project Management Institute (PMI)",
+            definition: "Según el **PMI**, la Administración es la aplicación de conocimientos, habilidades, herramientas y técnicas a las actividades de un proyecto para cumplir con sus requisitos, gestionando el alcance, tiempo, costo y calidad.",
+            reto: "Crea una Estructura de Desglose de Trabajo (EDT) siguiendo la guía del PMBOK.", 
+            skills: [
+                { name: "Gestión Ágil", concept: "Dominio de marcos como Scrum para entrega de valor rápida.", yt: "metodologias agiles pmi" },
+                { name: "Contabilidad NIIF", concept: "Aplicación de Normas Internacionales de Información Financiera.", yt: "niif para pymes curso" }
+            ],
+            search_trends: "tendencias administracion de empresas gerencia 2026",
+            yt_trends: "tendencias gerencia negocios 2026"
+        },
+        "construccion": { 
+            quote: "«Construimos infraestructuras, pero también el futuro y la seguridad de nuestras ciudades».",
+            inst: "American Society of Civil Engineers (ASCE)",
+            definition: "La **ASCE** define la Construcción e Ingeniería Civil como la profesión en la que el conocimiento de las ciencias matemáticas y físicas se aplica con juicio para utilizar económicamente los materiales y las fuerzas de la naturaleza en beneficio de la humanidad.",
+            reto: "Realiza el cómputo métrico rápido de una losa de fundación para una vivienda unifamiliar.", 
+            skills: [
+                { name: "Metodología BIM", concept: "Modelado de información de construcción para proyectos eficientes.", yt: "curso introduccion bim construccion" },
+                { name: "Diseño Sismoresistente", concept: "Aplicación de normativas estructurales para prevención de desastres.", yt: "diseno sismoresistente basico" }
+            ],
+            search_trends: "tendencias construccion civil materiales sostenibles 2026",
+            yt_trends: "tendencias ingenieria civil 2026"
+        },
+        "mantenimiento": { 
+            quote: "«El mantenimiento asegura que los activos cumplan su función dentro del contexto operacional».",
+            inst: "ISO 55000 / SMRP",
+            definition: "Bajo la norma **ISO 55000**, el Mantenimiento es el conjunto de actividades técnicas y administrativas asociadas, destinadas a conservar o devolver un activo a un estado en el cual pueda llevar a cabo la función requerida.",
+            reto: "Calcula la disponibilidad de un equipo basado en el MTBF y MTTR.", 
+            skills: [
+                { name: "Mantenimiento Preventivo", concept: "Planificación basada en tiempo y condición de activos.", yt: "mantenimiento industrial preventivo" },
+                { name: "Gestión de Activos Fijos", concept: "Optimización del ciclo de vida de la maquinaria industrial.", yt: "iso 55000 gestion de activos" }
+            ],
+            search_trends: "tendencias mantenimiento industrial 4.0 2026",
+            yt_trends: "tendencias ingenieria mantenimiento 2026"
+        },
+        "agroalimentaria": { 
+            quote: "«Quien cultiva la tierra con conocimiento, cultiva la vida y la soberanía de su nación».",
+            inst: "FAO (ONU para la Alimentación y la Agricultura)",
+            definition: "En el marco de la **FAO**, la Ingeniería Agroalimentaria integra los procesos agrícolas y de transformación para garantizar sistemas alimentarios resilientes, sostenibles y eficientes desde el campo hasta la primera etapa de procesamiento.",
+            reto: "Calcula el requerimiento hídrico para una hectárea de cultivo local bajo condiciones de estrés climático.", 
+            skills: [
+                { name: "Agricultura de Precisión", concept: "Uso de datos espaciales para optimizar el rendimiento de los cultivos.", yt: "introduccion agricultura de precision" },
+                { name: "Agroecología Sustentable", concept: "Diseño de sistemas productivos que conservan la biodiversidad.", yt: "agroecologia y sostenibilidad" }
+            ],
+            search_trends: "tendencias agroalimentarias tecnologia agricola 2026",
+            yt_trends: "tendencias innovacion agricultura 2026"
+        },
+        "seguridad_alimentaria": { 
+            quote: "«La inocuidad no es negociable; es la base fundamental del derecho a la salud pública».",
+            inst: "Codex Alimentarius / OMS",
+            definition: "La **OMS** y el **Codex Alimentarius** determinan que la seguridad e inocuidad alimentaria engloba todas las medidas que garantizan que los alimentos no causarán daño al consumidor cuando se preparen y/o consuman de acuerdo con su uso previsto.",
+            reto: "Realiza una auditoría visual simulada de un área de procesamiento basada en las Buenas Prácticas de Manufactura (BPM).", 
+            skills: [
+                { name: "Auditoría ISO 22000", concept: "Verificación de sistemas de gestión de inocuidad en la industria.", yt: "auditoria iso 22000 inocuidad" },
+                { name: "Sistemas HACCP", concept: "Análisis de peligros y control de puntos críticos en manufactura.", yt: "curso haccp alimentos" }
+            ],
+            search_trends: "tendencias inocuidad y seguridad alimentaria 2026",
+            yt_trends: "tendencias calidad e inocuidad de alimentos 2026"
+        }
+    };
+
+    function updateUI() {
+        const key = document.getElementById('pnf-selector').value;
+        const panel = document.getElementById('info-panel');
+        if(!key) { panel.style.display = 'none'; return; }
+        
+        const data = database[key];
+        panel.style.display = 'block';
+        
+        document.getElementById('quote-view').innerText = data.quote;
+        
+        // Renderizar Concepto Oficial
+        document.getElementById('concept-view').innerHTML = `
+            <span class="inst-logo">${data.inst}</span>
+            <div class="inst-definition">${data.definition}</div>
+        `;
+
+        // Renderizar Habilidades
+        const skillsView = document.getElementById('skills-view');
+        skillsView.innerHTML = "";
+        data.skills.forEach(skill => {
+            skillsView.innerHTML += `
+                <div class="card-item">
+                    <span class="card-tag">Competencia Técnica</span>
+                    <span class="card-name">${skill.name}</span>
+                    <div style="font-size:13px; color:#64748b; margin:5px 0;">${skill.concept}</div>
+                    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(skill.yt)}" target="_blank" class="btn-action dyn-link">▶️ Masterclass</a>
+                </div>
+            `;
+        });
+
+        document.getElementById('reto-text').innerText = data.reto;
+
+        // Actualizar enlaces de tendencias
+        document.getElementById('link-trends').href = `https://www.google.com/search?q=${encodeURIComponent(data.search_trends)}&tbm=nws`;
+        document.getElementById('link-yt-trends').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(data.yt_trends)}`;
+
+        checkConnection(); 
+    }
+
+    function checkConnection() {
+        const isOnline = navigator.onLine;
+        const status = document.getElementById('connection-status');
+        status.className = isOnline ? "status-bar online-save" : "status-bar offline";
+        status.innerText = isOnline ? "🌐 Conexión Activa - Definiciones Sincronizadas" : "⚠️ Modo Offline - Usando Base de Datos Local";
+        status.style.display = "block";
+
+        // Desactivar botones dinámicos si no hay internet
+        document.querySelectorAll('.dyn-link').forEach(btn => {
+            if(!isOnline) {
+                btn.classList.add('disabled');
+            } else {
+                btn.classList.remove('disabled');
+            }
+        });
+    }
+
+    function compartirWA() {
+        if(!navigator.onLine) return; // Evitar si está offline
+        const sel = document.getElementById('pnf-selector');
+        const data = database[sel.value];
+        const msg = `*UPTBAL Notifica:* \nConcepto Oficial de *${sel.options[sel.selectedIndex].text}*\n\n🏛️ *Fuente:* ${data.inst}\n🎯 *Reto:* ${data.reto}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
+    }
+
+    window.addEventListener('online', checkConnection);
+    window.addEventListener('offline', checkConnection);
+    window.onload = checkConnection;
+</script>
+</body>
+</html>
